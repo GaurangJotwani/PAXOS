@@ -1,0 +1,25 @@
+Executive Summary
+
+Assignment Overview:
+
+The purpose of this assignment was to enhance the fault tolerance of a distributed Key-Value Store system, previously implemented with 2PC, by integrating the Paxos consensus algorithm. The project aimed to achieve consensus among replicated state machine servers and ensure continued operation in the face of replica failures. The assignment involved implementing Paxos roles, such as Proposers, Acceptors, and Learners, using threads, and simulating failures in Acceptor and Learner nodes. The scope covered Paxos integration, concurrent execution handling, and demonstrating how Paxos overcomes node failures.
+
+Technical Impression
+
+The implementation of this project brought forth a series of challenges that provided valuable insights into the complexities of distributed systems and consensus algorithms. While the Paxos algorithm is conceptually straightforward, translating it into a functional system required grappling with various intricacies.
+
+One major challenge was dealing with the dynamic nature of the system. The high failure rate of 5% among acceptor nodes introduced unpredictability, causing a profound impact on the consensus process. Developing a mechanism to simulate these failures was an exercise in creating controlled chaos. The need to account for node failures while maintaining the integrity of the consensus outcome demanded a robust error handling strategy.
+
+A particularly intriguing challenge emerged when handling concurrent proposers. With more than two proposers simultaneously active, the consensus process often hit a deadlock. This unexpected behavior highlighted the importance of carefully balancing the number of proposers and managing their interactions to ensure steady progress in achieving consensus. As a remedy, I extended the replica count to 9, which not only helped mitigate deadlocks but also provided an opportunity to explore the impact of errors on a larger scale.
+
+The issue of data recovery in the face of learner node failures proved to be another intricate puzzle. Managing the cache and log state became crucial, as failure of a learner node led to discrepancies in system-wide information. Incorporating logging mechanisms allowed proposers with stale caches to quickly catch up with the latest LogIDs and synchronize their state with other replicas. This introduced an extra layer of complexity, but it demonstrated the importance of maintaining system-wide coherence.
+
+n hindsight, several potential enhancements could further refine the project's implementation and address some challenges encountered. Since the assignment only required acceptors to fail, I didn't focus on this aspect. One avenue for improvement is to introduce proposer tolerance mechanisms. This involves implementing strategies that dynamically adjust the number of active proposers based on the system's load and current circumstances. By intelligently managing proposer interactions, the potential for deadlocks and contention can be reduced, leading to smoother consensus processes even during periods of high activity or failure rates.
+
+Another area of improvement lies in optimizing the consensus process itself. While the project primarily focused on achieving consensus at the LogID level, introducing a more granular consensus mechanism could yield performance benefits. By considering both the LogID and the specific key involved in an operation, the system can achieve greater concurrency in operations that affect different keys. This approach would allow multiple proposals targeting different keys to be processed concurrently, minimizing contention and enhancing overall system efficiency.
+
+Building on this idea, the introduction of individual locks for each key could take the system's concurrency to the next level. This would enable transactions involving distinct keys to be executed concurrently, even if they are part of the same proposal. This approach not only aligns well with the key-value nature of the system but also maximizes parallelism, potentially leading to significant improvements in throughput and responsiveness.
+
+In conclusion, these improvements would enable the system to dynamically adapt to varying conditions, enhance the granularity of consensus processes, and unlock higher levels of concurrency. Implementing these enhancements would further underscore the project's educational value by allowing for deeper exploration of distributed systems design and consensus algorithms.
+
+In retrospect, this project provided hands-on experience in bridging the gap between theoretical concepts and practical implementation challenges in distributed systems. The difficulties faced underscored the significance of careful design choices, synchronization mechanisms, and robust error handling strategies. This project illuminated the real-world complexities of achieving consensus in distributed environments and deepened my appreciation for the intricacies that engineers face while building fault-tolerant systems.
